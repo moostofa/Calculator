@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-    calculator()
+    //calculator()
+    calculator2()
 })
 
 function calculator() {
@@ -33,4 +34,49 @@ function calculator() {
     operators.forEach(element => Object.entries(element).forEach(([key, value]) => {
         console.log(`key: ${key}, value: ${value}`)
     }))
+}
+
+function calculator2() {
+    const calculatorBtns = [
+        {"numbers": [7, 8, 9], "operators": {"clear": "AC"}},
+        {"numbers": [4, 5, 6], "operators": {"multiply": "x", "divide": "/"}},
+        {"numbers": [1, 2, 3], "operators": {"add": "+", "subtract": "-"}},
+        {"numbers": [0], "operators": {"equal": "="}},
+    ]
+    calculatorBtns.forEach(btnRow => {
+        const row = document.createElement("div")
+        row.classList = "row align-items-center justify-content-center"
+
+        btnRow["numbers"].forEach(number => {
+            const col = document.createElement("div")
+            col.classList = "col-sm"
+
+            const numberBtn = document.createElement("button")
+            numberBtn.value = numberBtn.innerHTML = number
+            numberBtn.classList = "btn btn-primary btn-lg"
+
+            col.appendChild(numberBtn)
+            row.appendChild(col)
+        })
+
+        console.log(`numbers: ${btnRow["numbers"]}`)
+        Object.entries(btnRow["operators"]).forEach(([key, value]) => {
+            console.log(`action: ${key}, sign: ${value}`)
+        })
+
+        document.querySelector(".container").appendChild(row)
+    })
+    /*
+    for (let i = 0; i < 4; i++) {
+        const row = document.createElement("div")
+        row.classList = "row"
+        for (let j = 0; j < 4; j++) {
+            const col = document.createElement("div")
+            col.innerHTML = "hello"
+            col.classList = "col"
+            row.appendChild(col)
+        }
+        document.querySelector(".container").appendChild(row)
+    }
+    */
 }
