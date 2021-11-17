@@ -3,15 +3,34 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 function calculator() {
-    for (let i = 1; i <= 9;) {
+    let operators = [
+        {"clear":"AC"},
+        {"add":"+", "subtract":"-"},
+        {"multiply":"x", "divide":"/"},
+        {"equal":"="}
+    ]
+    for (let i = 9; i >= 0;) {
         const row = document.createElement("div")
         row.classList = "row"
-        for (let j = 0; j < 3; j++, i++) {
-            const btn = document.createElement("button")
-            btn.value = btn.innerHTML = i
-            btn.classList = "btn btn-primary"
-            row.appendChild(btn)
+
+        Object.entries(operators.shift()).forEach(([key, value]) => {
+            const operatorBtn = document.createElement("button")
+            operatorBtn.value = key
+            operatorBtn.innerHTML = value
+            operatorBtn.classList = "btn btn-warning"
+            row.append(operatorBtn)
+        })
+
+        for (let j = 0; j < 3; j++, i--) {
+            if (i < 0) break
+            const numberBtn = document.createElement("button")
+            numberBtn.value = numberBtn.innerHTML = i
+            numberBtn.classList = "btn btn-primary btn-lg"
+            row.appendChild(numberBtn)
         }
         document.querySelector(".container").appendChild(row)
     }
+    operators.forEach(element => Object.entries(element).forEach(([key, value]) => {
+        console.log(`key: ${key}, value: ${value}`)
+    }))
 }
