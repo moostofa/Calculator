@@ -5,6 +5,24 @@
     flex-direction: column;
 }
 
+.row {
+    background-color: aliceblue;
+}
+
+.current-calculation, .previous-calculation {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row-reverse;
+    width: 516px;
+    height: 50px;
+    background-color: beige;
+    padding: 5px;
+}
+
+.current-calculation {
+    font-size: xx-large;
+}
+
 body {
     text-align: center;
 }
