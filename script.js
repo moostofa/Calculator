@@ -71,31 +71,28 @@ function calculator() {
 function calculate(btnValue) {
     // incase user inspects element and changes the value of a button
     if (!OPERATIONS.operators().includes(btnValue))
-    return alert("Invalid button: Button value provided does not match its expected value")
+    return alert("Invalid button - Button value provided does not match its expected value")
 
-    // add strings, e.g., 1 + 9 = "19"
+    // 1. If a number button was clicked, add its value to the currentValue string
+    // 2. Else, an operator button was clicked - perform either an arithmetic or visual operation
     if (!isNaN(parseFloat(btnValue))) {
         currentValue += btnValue
-        document.getElementById("current-calculation").innerHTML = currentValue
-        return
-    }
-
-    // a string that will display the previous step of the calculation to the user
-    temp = `${previousValue} ${operationToPerform} ${currentValue}`
-
-    // if either the previous or current value are empty, another operand is required
-    // else, a calculation can be performed with the two operands
-    if (previousValue.length === 0 || currentValue.length === 0) {
-        operationToPerform = btnValue
-        previousValue = currentValue
-        currentValue = ""
     } else {
-        const result = OPERATIONS["arithmetic"]["="]()
-        currentValue = (btnValue === "=") ? result : ""
-        previousValue = (btnValue === "=") ? "" : result
-        operationToPerform = btnValue
+        // if either the previous or current value are empty, another operand is required
+        // else, a calculation can be performed with the two operands
+        if (previousValue.length === 0 || currentValue.length === 0) {
+            operationToPerform = btnValue
+            previousValue = currentValue
+            currentValue = ""
+        } else {
+            const result = OPERATIONS["arithmetic"]["="]()
+            currentValue = (btnValue === "=") ? result : ""
+            previousValue = (btnValue === "=") ? "" : result
+            operationToPerform = btnValue
+        }
     }
-    document.getElementById("previous-calculation").innerHTML = temp
+
+    document.getElementById("previous-calculation").innerHTML = `${previousValue} ${operationToPerform} ${currentValue}`
     document.getElementById("current-operator").innerHTML = operationToPerform
     document.getElementById("current-calculation").innerHTML = currentValue
 }
