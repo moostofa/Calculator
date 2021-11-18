@@ -1,8 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // display the calculator on the screen
     calculator()
 })
 
 function calculator() {
+    // an array of number & operator values that will be assigned to the buttons
     const calculatorBtns = [
         {"numbers": [7, 8, 9], "operators": ["DEL", "AC"]},
         {"numbers": [4, 5, 6], "operators": ["x", "/"]},
@@ -10,110 +12,23 @@ function calculator() {
         {"numbers": [0], "operators": [".", "10^x", "ANS", "="]}
     ]
 
+    // create number and operator buttons for each row
     calculatorBtns.forEach(btnRow => {
         const row = document.createElement("div")
         row.classList = "row"
 
-        btnRow["numbers"].forEach(number => {
-            const btnDiv = document.createElement("div")
+        // -- key -- is "numbers" or "operators" and -- value -- is an array (.forEach() can be used)
+        Object.entries(btnRow).forEach(([key, value]) => {
+            value.forEach(val => {
+                const btn = document.createElement("button")
+                btn.value = btn.innerHTML = val
 
-            const btn = document.createElement("button")
-            btn.value = btn.innerHTML = number
-            btn.classList = "btn btn-lg btn-primary"
-
-            btnDiv.appendChild(btn)
-            row.appendChild(btnDiv)
+                // different button colour depending on if it is a "number" or "operator" button
+                btn.classList = `btn btn-lg btn-${key === "numbers" ? "primary" : "warning"}`
+                row.appendChild(btn)
+            })
         })
-
-        btnRow["operators"].forEach(operator => {
-            const btnDiv = document.createElement("div")
-            btnDiv.classList = "item"
-
-            const btn = document.createElement("button")
-            btn.value = btn.innerHTML = operator
-            btn.classList = "btn btn-lg btn-warning"
-
-            btnDiv.appendChild(btn)
-            row.appendChild(btnDiv)
-        })
+        // add the row of buttons to the calculator
         document.querySelector(".container").appendChild(row)
     })
 }
-
-/*
-function calculator() {
-    let operators = [
-        {"clear":"AC"},
-        {"add":"+", "subtract":"-"},
-        {"multiply":"x", "divide":"/"},
-        {"equal":"="}
-    ]
-    for (let i = 9; i >= 0;) {
-        const row = document.createElement("div")
-        row.classList = "row"
-
-        Object.entries(operators.shift()).forEach(([key, value]) => {
-            const operatorBtn = document.createElement("button")
-            operatorBtn.value = key
-            operatorBtn.innerHTML = value
-            operatorBtn.classList = "btn btn-warning"
-            row.append(operatorBtn)
-        })
-
-        for (let j = 0; j < 3; j++, i--) {
-            if (i < 0) break
-            const numberBtn = document.createElement("button")
-            numberBtn.value = numberBtn.innerHTML = i
-            numberBtn.classList = "btn btn-primary btn-lg"
-            row.appendChild(numberBtn)
-        }
-        document.querySelector(".container").appendChild(row)
-    }
-    operators.forEach(element => Object.entries(element).forEach(([key, value]) => {
-        console.log(`key: ${key}, value: ${value}`)
-    }))
-}
-
-function calculator() {
-    const calculatorBtns = [
-        {"numbers": [7, 8, 9], "operators": {"clear": "AC"}},
-        {"numbers": [4, 5, 6], "operators": {"multiply": "x", "divide": "/"}},
-        {"numbers": [1, 2, 3], "operators": {"add": "+", "subtract": "-"}},
-        {"numbers": [0], "operators": {"equal": "="}},
-    ]
-    calculatorBtns.forEach(btnRow => {
-        const row = document.createElement("div")
-        row.classList = "row align-items-center justify-content-center"
-
-        btnRow["numbers"].forEach(number => {
-            const col = document.createElement("div")
-            col.classList = "col-sm"
-
-            const numberBtn = document.createElement("button")
-            numberBtn.value = numberBtn.innerHTML = number
-            numberBtn.classList = "btn btn-primary btn-lg"
-
-            col.appendChild(numberBtn)
-            row.appendChild(col)
-        })
-
-        console.log(`numbers: ${btnRow["numbers"]}`)
-        Object.entries(btnRow["operators"]).forEach(([key, value]) => {
-            console.log(`action: ${key}, sign: ${value}`)
-        })
-
-        document.querySelector(".container").appendChild(row)
-    })
-    for (let i = 0; i < 4; i++) {
-        const row = document.createElement("div")
-        row.classList = "row"
-        for (let j = 0; j < 4; j++) {
-            const col = document.createElement("div")
-            col.innerHTML = "hello"
-            col.classList = "col"
-            row.appendChild(col)
-        }
-        document.querySelector(".container").appendChild(row)
-    }
-}
-*/
