@@ -6,22 +6,19 @@ const OPERATIONS = {
     "/": (a, b) => a / b,
     "+": (a, b) => a + b, 
     "-": (a, b) => a - b,
-    ".": () => currentValue += ".", 
+    ".": () => currentValue += ".",  // incomplete
     "10^x": () => 10 ** currentValue, 
     "ANS": () => currentValue = previousValue, 
-    "=": () => OPERATIONS[operationToPerform](
-        parseInt(previousValue),
-        parseInt(currentValue)
-    )
+    "=": () => OPERATIONS[operationToPerform](parseFloat(previousValue), parseFloat(currentValue))
 }
 
-// the previous value calculated, and the current value which is being created
+// variables to keep track of the current state of the calculation
 let previousValue = "" 
 let currentValue = "" 
 let operationToPerform = ""
 
+// display the calculator on the screen after DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
-    // display the calculator on the screen
     calculator()
 })
 
@@ -72,23 +69,23 @@ function calculate(btnValue) {
     // incase user inspects element and changes the value of a button
     if (!Object.keys(OPERATIONS).includes(btnValue))
         return alert("Invalid operator - operator value does not match its functionality")
-        
-    if (btnValue === "=") {
-        temp = `${previousValue} ${operationToPerform} ${currentValue}`
-        currentValue = OPERATIONS[btnValue]()
-        previousValue = temp
-        operationToPerform = btnValue
 
-    } else if (previousValue.length === 0 || currentValue.length === 0) {
+    // a string that will display the previous step of the calculation to the user
+    temp = `${previousValue} ${operationToPerform} ${currentValue}`
+
+    // if either the previous or current value are empty, another operand is required
+    // else, a calculation can be performed with the two operands
+    if (previousValue.length === 0 || currentValue.length === 0) {
         operationToPerform = btnValue
         previousValue = currentValue
         currentValue = ""
-        
     } else {
-        previousValue = OPERATIONS["="]()
-        currentValue = ""
+        const result = OPERATIONS["="]()
+        currentValue = (btnValue === "=") ? result : ""
+        previousValue = (btnValue === "=") ? "" : result
+        operationToPerform = btnValue
     }
-    document.getElementById("previous-calculation").innerHTML = previousValue
+    document.getElementById("previous-calculation").innerHTML = temp
     document.getElementById("current-operator").innerHTML = operationToPerform
     document.getElementById("current-calculation").innerHTML = currentValue
 }
