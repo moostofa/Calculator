@@ -63,21 +63,32 @@ function calculator() {
 // 2. If an operator button is clicked, validate the button value and save it as the operation to be performed
 function calculate(btnValue) {
     // add strings, e.g., 1 + 9 = "19"
-    if (!isNaN(parseFloat(btnValue))) 
-        return currentValue += btnValue
+    if (!isNaN(parseFloat(btnValue))) {
+        currentValue += btnValue
+        document.getElementById("current-calculation").innerHTML = currentValue
+        return
+    }
 
     // incase user inspects element and changes the value of a button
     if (!Object.keys(OPERATIONS).includes(btnValue))
         return alert("Invalid operator - operator value does not match its functionality")
         
     if (btnValue === "=") {
+        temp = `${previousValue} ${operationToPerform} ${currentValue}`
         currentValue = OPERATIONS[btnValue]()
-        previousValue = ""
-    } else {
+        previousValue = temp
+        operationToPerform = btnValue
+
+    } else if (previousValue.length === 0 || currentValue.length === 0) {
         operationToPerform = btnValue
         previousValue = currentValue
         currentValue = ""
+        
+    } else {
+        previousValue = OPERATIONS["="]()
+        currentValue = ""
     }
     document.getElementById("previous-calculation").innerHTML = previousValue
+    document.getElementById("current-operator").innerHTML = operationToPerform
     document.getElementById("current-calculation").innerHTML = currentValue
 }
