@@ -1,15 +1,19 @@
 // the operations that will be performed on previousValue and currentValue when user clicks "="
 const OPERATIONS = {
-    "DEL": () => currentValue = currentValue.slice(0, -1), 
-    "AC": () => currentValue = "",
-    "x": (a, b) => a * b, 
-    "/": (a, b) => a / b,
-    "+": (a, b) => a + b, 
-    "-": (a, b) => a - b,
-    ".": () => currentValue += ".",  // incomplete
-    "10^x": () => 10 ** currentValue, 
-    "ANS": () => currentValue = previousValue, 
-    "=": () => OPERATIONS[operationToPerform](parseFloat(previousValue), parseFloat(currentValue))
+    "arithmetic": {
+        "x": (a, b) => a * b, 
+        "/": (a, b) => a / b,
+        "+": (a, b) => a + b, 
+        "-": (a, b) => a - b,
+        "=": () => OPERATIONS["arithmetic"][operationToPerform](parseFloat(previousValue), parseFloat(currentValue))
+    },
+    "visual": {
+        "DEL": () => currentValue = currentValue.slice(0, -1), 
+        "AC": () => currentValue = "",
+        ".": () => currentValue += ".",  // incomplete
+        "10^x": () => 10 ** currentValue, 
+        "ANS": () => currentValue = previousValue, 
+    }
 }
 
 // variables to keep track of the current state of the calculation
@@ -24,14 +28,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // calculator constructor
 function calculator() {
-    const operators = Object.keys(OPERATIONS)
+    // combine arithmetic and visual operators into a list of all operators
+    const arithmetic = Object.keys(OPERATIONS["arithmetic"])
+    const visual = Object.keys(OPERATIONS["visual"])
+    const operators = [...arithmetic, ...visual]
     
     // an array of numbers & operators that will be assigned to the buttons' values
     const calculatorBtns = [
-        {"numbers": [7, 8, 9], "operators": operators.slice(0, 2)},
-        {"numbers": [4, 5, 6], "operators": operators.slice(2, 4)},
-        {"numbers": [1, 2, 3], "operators": operators.slice(4, 6)},
-        {"numbers": [0], "operators": operators.slice(6, operators.length)}
+        {"numbers": [7, 8, 9], "operators": operators.slice(5, 7)},
+        {"numbers": [4, 5, 6], "operators": operators.slice(0, 2)},
+        {"numbers": [1, 2, 3], "operators": operators.slice(2, 4)},
+        {"numbers": [0], "operators": operators.slice(7, operators.length).concat(operators[4])}
     ]
 
     // create number and operator buttons for each row
@@ -67,7 +74,7 @@ function calculate(btnValue) {
     }
 
     // incase user inspects element and changes the value of a button
-    if (!Object.keys(OPERATIONS).includes(btnValue))
+    if (!Object.keys(OPERATIONS["arithmetic"]).concat(Object.keys(OPERATIONS["visual"])).includes(btnValue))
         return alert("Invalid operator - operator value does not match its functionality")
 
     // a string that will display the previous step of the calculation to the user
@@ -80,7 +87,7 @@ function calculate(btnValue) {
         previousValue = currentValue
         currentValue = ""
     } else {
-        const result = OPERATIONS["="]()
+        const result = OPERATIONS["arithmetic"]["="]()
         currentValue = (btnValue === "=") ? result : ""
         previousValue = (btnValue === "=") ? "" : result
         operationToPerform = btnValue
