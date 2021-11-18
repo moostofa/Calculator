@@ -13,6 +13,12 @@ const OPERATIONS = {
         ".": () => currentValue += ".",  // incomplete
         "10^x": () => 10 ** currentValue, 
         "ANS": () => currentValue = previousValue, 
+    },
+    // combine arithmetic and visual operators and return a list of all operators
+    "operators": () => {
+        const arithmetic = Object.keys(OPERATIONS["arithmetic"])
+        const visual = Object.keys(OPERATIONS["visual"])
+        return [...arithmetic, ...visual]
     }
 }
 
@@ -28,10 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // calculator constructor
 function calculator() {
-    // combine arithmetic and visual operators into a list of all operators
-    const arithmetic = Object.keys(OPERATIONS["arithmetic"])
-    const visual = Object.keys(OPERATIONS["visual"])
-    const operators = [...arithmetic, ...visual]
+    const operators = OPERATIONS.operators()
     
     // an array of numbers & operators that will be assigned to the buttons' values
     const calculatorBtns = [
@@ -66,16 +69,16 @@ function calculator() {
 // 1. If a number button is clicked, append the currentValue string with that number
 // 2. If an operator button is clicked, validate the button value and save it as the operation to be performed
 function calculate(btnValue) {
+    // incase user inspects element and changes the value of a button
+    if (!OPERATIONS.operators().includes(btnValue))
+    return alert("Invalid button: Button value provided does not match its expected value")
+
     // add strings, e.g., 1 + 9 = "19"
     if (!isNaN(parseFloat(btnValue))) {
         currentValue += btnValue
         document.getElementById("current-calculation").innerHTML = currentValue
         return
     }
-
-    // incase user inspects element and changes the value of a button
-    if (!Object.keys(OPERATIONS["arithmetic"]).concat(Object.keys(OPERATIONS["visual"])).includes(btnValue))
-        return alert("Invalid operator - operator value does not match its functionality")
 
     // a string that will display the previous step of the calculation to the user
     temp = `${previousValue} ${operationToPerform} ${currentValue}`
