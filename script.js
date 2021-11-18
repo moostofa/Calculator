@@ -1,8 +1,46 @@
 document.addEventListener("DOMContentLoaded", () => {
-    //calculator()
-    calculator2()
+    calculator()
 })
 
+function calculator() {
+    const calculatorBtns = [
+        {"numbers": [7, 8, 9], "operators": ["DEL", "AC"]},
+        {"numbers": [4, 5, 6], "operators": ["x", "/"]},
+        {"numbers": [1, 2, 3], "operators": ["+", "-"]},
+        {"numbers": [0], "operators": [".", "10^x", "ANS", "="]}
+    ]
+
+    calculatorBtns.forEach(btnRow => {
+        const row = document.createElement("div")
+        row.classList = "row"
+
+        btnRow["numbers"].forEach(number => {
+            const btnDiv = document.createElement("div")
+
+            const btn = document.createElement("button")
+            btn.value = btn.innerHTML = number
+            btn.classList = "btn btn-lg btn-primary"
+
+            btnDiv.appendChild(btn)
+            row.appendChild(btnDiv)
+        })
+
+        btnRow["operators"].forEach(operator => {
+            const btnDiv = document.createElement("div")
+            btnDiv.classList = "item"
+
+            const btn = document.createElement("button")
+            btn.value = btn.innerHTML = operator
+            btn.classList = "btn btn-lg btn-warning"
+
+            btnDiv.appendChild(btn)
+            row.appendChild(btnDiv)
+        })
+        document.querySelector(".container").appendChild(row)
+    })
+}
+
+/*
 function calculator() {
     let operators = [
         {"clear":"AC"},
@@ -36,7 +74,7 @@ function calculator() {
     }))
 }
 
-function calculator2() {
+function calculator() {
     const calculatorBtns = [
         {"numbers": [7, 8, 9], "operators": {"clear": "AC"}},
         {"numbers": [4, 5, 6], "operators": {"multiply": "x", "divide": "/"}},
@@ -66,7 +104,6 @@ function calculator2() {
 
         document.querySelector(".container").appendChild(row)
     })
-    /*
     for (let i = 0; i < 4; i++) {
         const row = document.createElement("div")
         row.classList = "row"
@@ -78,5 +115,5 @@ function calculator2() {
         }
         document.querySelector(".container").appendChild(row)
     }
-    */
 }
+*/
