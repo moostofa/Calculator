@@ -62,15 +62,17 @@ function calculator() {
 // 1. If a number button is clicked, append the currentValue string with that number
 // 2. If an operator button is clicked, validate the button value and save it as the operation to be performed
 function calculate(btnValue) {
-    if (!isNaN(parseInt(btnValue))) 
+    // add strings, e.g., 1 + 9 = "19"
+    if (!isNaN(parseFloat(btnValue))) 
         return currentValue += btnValue
 
+    // incase user inspects element and changes the value of a button
     if (!Object.keys(OPERATIONS).includes(btnValue))
         return alert("Invalid operator - operator value does not match its functionality")
-
+        
     if (btnValue === "=") {
-        previousValue = OPERATIONS[btnValue]()
-        currentValue = ""
+        currentValue = OPERATIONS[btnValue]()
+        previousValue = ""
     } else {
         operationToPerform = btnValue
         previousValue = currentValue
