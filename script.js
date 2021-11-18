@@ -1,14 +1,14 @@
 // the operations that will be performed on previousValue and currentValue when user clicks "="
 const OPERATIONS = {
-    "DEL": () => console.log("Delete"), 
-    "AC": () => console.log("Clear"),
+    "DEL": () => currentValue = currentValue.slice(0, -1), 
+    "AC": () => currentValue = "",
     "x": () => console.log("Multiply"), 
     "/": () => console.log("Divide"),
     "+": () => console.log("Add"), 
     "-": () => console.log("Subtract"),
     ".": () => console.log("Decimal place"), 
     "10^x": () => console.log("10 to the power"), 
-    "ANS": () => console.log("ANS"), 
+    "ANS": () => currentValue = previousValue, 
     "=": () => console.log("Equal")
 }
 
@@ -64,5 +64,5 @@ function calculate(btnValue) {
     }
     if (!Object.keys(OPERATIONS).includes(btnValue))
         return alert("Invalid operator - operator value does not match its functionality")
-
+    OPERATIONS[btnValue]()
 }
