@@ -1,3 +1,4 @@
+// the operations that will be performed on previousValue and currentValue when user clicks "="
 const OPERATIONS = {
     "DEL": () => console.log("Delete"), 
     "AC": () => console.log("Clear"),
@@ -11,22 +12,24 @@ const OPERATIONS = {
     "=": () => console.log("Equal")
 }
 
-console.log(Object.keys(OPERATIONS))
+// the previous value calculated, and the current value which is being created
+let previousValue = currentValue = ""
 
 document.addEventListener("DOMContentLoaded", () => {
     // display the calculator on the screen
     calculator()
 })
 
-let current = prev = ""
-
+// calculator constructor
 function calculator() {
-    // an array of number & operator values that will be assigned to the buttons
+    const operators = Object.keys(OPERATIONS)
+    
+    // an array of numbers & operators that will be assigned to the buttons' values
     const calculatorBtns = [
-        {"numbers": [7, 8, 9], "operators": ["DEL", "AC"]},
-        {"numbers": [4, 5, 6], "operators": ["x", "/"]},
-        {"numbers": [1, 2, 3], "operators": ["+", "-"]},
-        {"numbers": [0], "operators": [".", "10^x", "ANS", "="]}
+        {"numbers": [7, 8, 9], "operators": operators.slice(0, 2)},
+        {"numbers": [4, 5, 6], "operators": operators.slice(2, 4)},
+        {"numbers": [1, 2, 3], "operators": operators.slice(4, 6)},
+        {"numbers": [0], "operators": operators.slice(6, operators.length)}
     ]
 
     // create number and operator buttons for each row
@@ -51,9 +54,15 @@ function calculator() {
     })
 }
 
+// 1. If a number button is clicked, append the currentValue string with that number
+// 2. If an operator button is clicked, validate the button value and save it as the operation to be performed
 function calculate(btnValue) {
-    if (!isNaN(parseInt(btn))) {
-        current += btnValue
+    if (!isNaN(parseInt(btnValue))) {
+        currentValue += btnValue
+        console.log(currentValue)
+        return
     }
-    console.log(current)
+    if (!Object.keys(OPERATIONS).includes(btnValue))
+        return alert("Invalid operator - operator value does not match its functionality")
+
 }
