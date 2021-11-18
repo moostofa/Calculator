@@ -2,18 +2,23 @@
 const OPERATIONS = {
     "DEL": () => currentValue = currentValue.slice(0, -1), 
     "AC": () => currentValue = "",
-    "x": () => console.log("Multiply"), 
-    "/": () => console.log("Divide"),
-    "+": () => console.log("Add"), 
-    "-": () => console.log("Subtract"),
+    "x": (a, b) => a * b, 
+    "/": (a, b) => a / b,
+    "+": (a, b) => a + b, 
+    "-": (a, b) => a - b,
     ".": () => console.log("Decimal place"), 
-    "10^x": () => console.log("10 to the power"), 
+    "10^x": () => 10 ** currentValue, 
     "ANS": () => currentValue = previousValue, 
-    "=": () => console.log("Equal")
+    "=": () => OPERATIONS[operationToPerform](
+        parseInt(previousValue),
+        parseInt(currentValue)
+    )
 }
 
 // the previous value calculated, and the current value which is being created
-let previousValue = currentValue = ""
+let previousValue = "" 
+let currentValue = "" 
+let operationToPerform = ""
 
 document.addEventListener("DOMContentLoaded", () => {
     // display the calculator on the screen
@@ -57,12 +62,18 @@ function calculator() {
 // 1. If a number button is clicked, append the currentValue string with that number
 // 2. If an operator button is clicked, validate the button value and save it as the operation to be performed
 function calculate(btnValue) {
-    if (!isNaN(parseInt(btnValue))) {
-        currentValue += btnValue
-        console.log(currentValue)
-        return
-    }
+    if (!isNaN(parseInt(btnValue))) 
+        return currentValue += btnValue
+
     if (!Object.keys(OPERATIONS).includes(btnValue))
         return alert("Invalid operator - operator value does not match its functionality")
-    OPERATIONS[btnValue]()
+
+    if (btnValue === "=") {
+        previousValue = OPERATIONS[btnValue]()
+        currentValue = ""
+    } else {
+        operationToPerform = btnValue
+        previousValue = currentValue
+        currentValue = ""
+    }
 }
