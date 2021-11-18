@@ -6,7 +6,7 @@ const OPERATIONS = {
     "/": (a, b) => a / b,
     "+": (a, b) => a + b, 
     "-": (a, b) => a - b,
-    ".": () => console.log("Decimal place"), 
+    ".": () => currentValue += ".", 
     "10^x": () => 10 ** currentValue, 
     "ANS": () => currentValue = previousValue, 
     "=": () => OPERATIONS[operationToPerform](
@@ -78,4 +78,6 @@ function calculate(btnValue) {
         previousValue = currentValue
         currentValue = ""
     }
+    document.getElementById("previous-calculation").innerHTML = previousValue
+    document.getElementById("current-calculation").innerHTML = currentValue
 }
