@@ -12,7 +12,6 @@
 .current-calculation, .previous-calculation {
     display: flex;
     align-items: flex-start;
-    flex-direction: row-reverse;
     width: 516px;
     height: 50px;
     background-color: beige;

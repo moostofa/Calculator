@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
     calculator()
 })
 
+let current = prev = ""
+
 function calculator() {
     // an array of number & operator values that will be assigned to the buttons
     const calculatorBtns = [
@@ -25,10 +27,18 @@ function calculator() {
 
                 // different button colour depending on if it is a "number" or "operator" button
                 btn.classList = `btn btn-lg btn-${key === "numbers" ? "primary" : "warning"}`
+                btn.addEventListener("click", () => calculate(btn.value))
                 row.appendChild(btn)
             })
         })
         // add the row of buttons to the calculator
         document.querySelector(".container").appendChild(row)
     })
+}
+
+function calculate(btnValue) {
+    if (!isNaN(parseInt(btn))) {
+        current += btnValue
+    }
+    console.log(current)
 }
