@@ -1,3 +1,18 @@
+const OPERATIONS = {
+    "DEL": () => console.log("Delete"), 
+    "AC": () => console.log("Clear"),
+    "x": () => console.log("Multiply"), 
+    "/": () => console.log("Divide"),
+    "+": () => console.log("Add"), 
+    "-": () => console.log("Subtract"),
+    ".": () => console.log("Decimal place"), 
+    "10^x": () => console.log("10 to the power"), 
+    "ANS": () => console.log("ANS"), 
+    "=": () => console.log("Equal")
+}
+
+console.log(Object.keys(OPERATIONS))
+
 document.addEventListener("DOMContentLoaded", () => {
     // display the calculator on the screen
     calculator()
