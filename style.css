@@ -9,17 +9,22 @@
     background-color: aliceblue;
 }
 
-.current-calculation, .previous-calculation {
+.equal-btn {
+    width: 200px;
+}
+
+.display {
     display: flex;
     align-items: flex-start;
     width: 516px;
     height: 50px;
     background-color: beige;
     padding: 5px;
+    font-size: xx-large;
 }
 
-.current-calculation {
-    font-size: xx-large;
+.equal-btn {
+    width: 200px;
 }
 
 body {

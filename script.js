@@ -1,32 +1,62 @@
-document.addEventListener("DOMContentLoaded", () => {
-    // display the calculator on the screen
-    calculator()
-})
+const OPERATIONS = {
+    "arithmetic": {
+        "x": (a, b) => a * b, 
+        "/": (a, b) => a / b,
+        "+": (a, b) => a + b, 
+        "-": (a, b) => a - b,
+        "=": () => OPERATIONS["arithmetic"][operationToPerform](parseFloat(previousValue), parseFloat(currentValue))
+    },
+    "visual": {
+        "DEL": () => {
+            if (currentValue !== "") currentValue = currentValue.slice(0, -1) 
+            else operationToPerform = ""
+        }, 
+        "AC": () => previousValue = currentValue = operationToPerform = "",
+        ".": () => currentValue += ".", 
+        "ANS": () => currentValue = ANS, 
+    },
+    // combine arithmetic and visual operators and return a list of all operators
+    "operators": () => {
+        const arithmetic = Object.keys(OPERATIONS["arithmetic"])
+        const visual = Object.keys(OPERATIONS["visual"])
+        return [...arithmetic, ...visual]
+    }
+}
 
-let current = prev = ""
+// variables to keep track of the current state of the calculation
+let previousValue = "" 
+let currentValue = "" 
+let operationToPerform = ""
+let ANS = ""
 
+// display the calculator on the screen after DOM is loaded
+document.addEventListener("DOMContentLoaded", () => calculator())
+
+// calculator constructor
 function calculator() {
-    // an array of number & operator values that will be assigned to the buttons
+    const operators = OPERATIONS.operators()
+    
+    // an array of numbers & operators that will be assigned to the buttons' values
     const calculatorBtns = [
-        {"numbers": [7, 8, 9], "operators": ["DEL", "AC"]},
-        {"numbers": [4, 5, 6], "operators": ["x", "/"]},
-        {"numbers": [1, 2, 3], "operators": ["+", "-"]},
-        {"numbers": [0], "operators": [".", "10^x", "ANS", "="]}
+        {"numbers": [7, 8, 9], "operators": operators.slice(5, 7)},
+        {"numbers": [4, 5, 6], "operators": operators.slice(0, 2)},
+        {"numbers": [1, 2, 3], "operators": operators.slice(2, 4)},
+        {"numbers": [0], "operators": operators.slice(7, operators.length).concat(operators[4])}
     ]
-
     // create number and operator buttons for each row
     calculatorBtns.forEach(btnRow => {
         const row = document.createElement("div")
         row.classList = "row"
 
-        // -- key -- is "numbers" or "operators" and -- value -- is an array (.forEach() can be used)
+        // -- key -- will be "numbers" or "operators" and -- value -- is an array of values for the buttons
         Object.entries(btnRow).forEach(([key, value]) => {
             value.forEach(val => {
                 const btn = document.createElement("button")
                 btn.value = btn.innerHTML = val
 
                 // different button colour depending on if it is a "number" or "operator" button
-                btn.classList = `btn btn-lg btn-${key === "numbers" ? "primary" : "warning"}`
+                btn.classList = `btn btn-lg btn-${(key === "numbers") ? "primary" : "warning"}`
+                if (btn.value === "=") btn.classList += " equal-btn"    //equal button width = width of 2 buttons
                 btn.addEventListener("click", () => calculate(btn.value))
                 row.appendChild(btn)
             })
@@ -36,9 +66,46 @@ function calculator() {
     })
 }
 
+// 1. If a number button was clicked, add its value to the currentValue string
+// 2. Else, an operator button was clicked - perform either an arithmetic or visual operation
 function calculate(btnValue) {
-    if (!isNaN(parseInt(btn))) {
-        current += btnValue
+    let equation = ""
+    if (!isNaN(parseFloat(btnValue))) {
+        currentValue += btnValue
+    } else {
+        // error checking - incase button value was changed
+        if (!OPERATIONS.operators().includes(btnValue))
+            return alert("Invalid button - Button value provided does not match its expected value")
+
+        if (Object.keys(OPERATIONS["arithmetic"]).includes(btnValue)) {
+            // 1. If either the previous or current value are empty, another operand is required
+            // 2. else, a calculation can be performed with the two operands
+            if (previousValue.length === 0 || currentValue.length === 0 || operationToPerform === "=") {
+                previousValue = currentValue
+                currentValue = ""
+                operationToPerform = btnValue
+            } else {
+                // evaluate the expression with previousValue and currentValue
+                const result = OPERATIONS["arithmetic"]["="]()
+
+                // 1. If "=" button is pressed, display result and the last step of the calculation
+                // 2. else, one of "x/+-" was pressed, continue the running calculation
+                if (btnValue === "=") {
+                    equation = `${previousValue} ${operationToPerform} ${currentValue}`
+                    currentValue = ANS = result
+                } else {
+                    previousValue = result
+                    currentValue = ""
+                }
+                operationToPerform = btnValue
+            }
+        } else OPERATIONS["visual"][btnValue]()
     }
-    console.log(current)
+    document.getElementById("previous-calculation").innerHTML = (btnValue === "=") ? equation : previousValue
+    document.getElementById("current-operator").innerHTML = operationToPerform
+    document.getElementById("current-calculation").innerHTML = currentValue
 }
+
+// TODO: prevent user from spamming operator buttons and the "." (decimal) button
+// Solution 1: disable operator buttons after any operator button is clicked
+// Solution 2: Allow user to stack operator buttons but only perform calculation using the LAST operator
