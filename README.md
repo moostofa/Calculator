@@ -1,3 +1,2 @@
 # Calculator
-Live demo
-![Calculator](https://moostofa.github.io/Calculator/)
+[Live demo](https://moostofa.github.io/Calculator/)
