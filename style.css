@@ -18,6 +18,10 @@
     padding: 5px;
 }
 
+.equal-btn {
+    width: 200px;
+}
+
 #current-calculation, #current-operator {
     font-size: xx-large;
 }

@@ -7,10 +7,16 @@ const OPERATIONS = {
         "=": () => OPERATIONS["arithmetic"][operationToPerform](parseFloat(previousValue), parseFloat(currentValue))
     },
     "visual": {
-        "DEL": () => currentValue = currentValue.slice(0, -1), 
-        "AC": () => currentValue = "",
+        "DEL": () => {
+            if (currentValue !== "") currentValue = currentValue.slice(0, -1) 
+            else operationToPerform = ""
+        }, 
+        "AC": () => {
+            if (currentValue !== "") currentValue = ""
+            else if (operationToPerform !== "") operationToPerform = ""
+            else previousValue = ""
+        },
         ".": () => currentValue += ".", 
-        "10^x": () => 10 ** currentValue, 
         "ANS": () => currentValue = previousValue, 
     },
     // combine arithmetic and visual operators and return a list of all operators
@@ -53,7 +59,8 @@ function calculator() {
                 btn.value = btn.innerHTML = val
 
                 // different button colour depending on if it is a "number" or "operator" button
-                btn.classList = `btn btn-lg btn-${key === "numbers" ? "primary" : "warning"}`
+                btn.classList = `btn btn-lg btn-${(key === "numbers") ? "primary" : "warning"}`
+                if (btn.value === "=") btn.classList += " equal-btn"    //equal button width = width of 2 buttons
                 btn.addEventListener("click", () => calculate(btn.value))
                 row.appendChild(btn)
             })
@@ -90,7 +97,7 @@ function calculate(btnValue) {
             OPERATIONS["visual"][btnValue]()
         }
     }
-    document.getElementById("previous-calculation").innerHTML = `${previousValue} ${operationToPerform} ${currentValue}`
+    document.getElementById("previous-calculation").innerHTML = (btnValue !== "=") ? `${previousValue}` : `${previousValue} ${operationToPerform} ${currentValue}`
     document.getElementById("current-operator").innerHTML = operationToPerform
     document.getElementById("current-calculation").innerHTML = currentValue
 }
