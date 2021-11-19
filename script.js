@@ -12,14 +12,19 @@ const OPERATIONS = {
             else {
                 operationToPerform = ""
                 toggleOperatorBtns("ON")
+                toggleNumberBtns("OFF")
             } 
         }, 
         "AC": () => {
             previousValue = currentValue = operationToPerform = ""
             toggleOperatorBtns("OFF")
+            toggleNumberBtns("ON")
         },
         ".": () => currentValue += (!currentValue.includes(".")) ? "." : "", 
-        "ANS": () => currentValue = ANS, 
+        "ANS": () => {
+            currentValue = ANS
+            toggleOperatorBtns("ON")
+        } 
     },
     // combine arithmetic and visual operators and return a list of all operators
     "operators": () => {
@@ -88,10 +93,14 @@ function calculate(btnValue) {
             return alert("Invalid button - Button value provided does not match its expected value")
 
         if (Object.keys(OPERATIONS["arithmetic"]).includes(btnValue)) {
+            toggleNumberBtns("ON")
+
             // 1. If either the previous or current value are empty, another operand is required
             // 2. else, a calculation can be performed with the two operands
             if (previousValue.length === 0 || currentValue.length === 0 || operationToPerform === "=") {
-                previousValue = currentValue
+                // THIS line prevents calculator from malfunctioning when DEL is used on an operator
+                if (currentValue.length !== 0) previousValue = currentValue
+
                 currentValue = ""
                 operationToPerform = btnValue
                 toggleOperatorBtns("OFF")
@@ -118,6 +127,7 @@ function calculate(btnValue) {
     document.getElementById("current-calculation").innerHTML = currentValue
 }
 
+// toggle operator buttons to prevent spam
 function toggleOperatorBtns(action) {
     const arithmeticOperators = Object.keys(OPERATIONS["arithmetic"])
     arithmeticOperators.forEach(operator => {
@@ -128,4 +138,15 @@ function toggleOperatorBtns(action) {
     })
 }
 
-// bug remaining: DEL on an operator ruins the calculation
+/*
+this function exists for an edge case: 
+1. DEL is used on an operator 
+2. The next button pressed must be an operator, thus, number all buttons need to be disabled for that step
+*/
+function toggleNumberBtns(action) {
+    for (let i = 0; i <= 9; i++)
+    if (action === "ON")
+            document.querySelector(`[name = "${i}"]`).removeAttribute("disabled")
+        else
+            document.querySelector(`[name = "${i}"]`).setAttribute("disabled", "")
+}
