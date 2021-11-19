@@ -16,7 +16,7 @@ const OPERATIONS = {
         }, 
         "AC": () => {
             previousValue = currentValue = operationToPerform = ""
-            toggleOperatorBtns("ON")
+            toggleOperatorBtns("OFF")
         },
         ".": () => currentValue += (!currentValue.includes(".")) ? "." : "", 
         "ANS": () => currentValue = ANS, 
@@ -63,7 +63,7 @@ function calculator() {
                 // different button colour depending on if it is a "number" or "operator" button
                 btn.classList = `btn btn-lg btn-${(key === "numbers") ? "primary" : "warning"}`
 
-                //equal button width = width of 2 buttons
+                // the equal button will have the width of 2 buttons (in style.css)
                 if (btn.value === "=") btn.classList += " equal-btn"    
                 btn.addEventListener("click", () => calculate(btn.value))
                 row.appendChild(btn)
@@ -122,7 +122,7 @@ function toggleOperatorBtns(action) {
     const arithmeticOperators = Object.keys(OPERATIONS["arithmetic"])
     arithmeticOperators.forEach(operator => {
         if (action === "ON")
-            document.querySelector(`[name = "${operator}"]`).removeAttribute("disabled", "")
+            document.querySelector(`[name = "${operator}"]`).removeAttribute("disabled")
         else
             document.querySelector(`[name = "${operator}"]`).setAttribute("disabled", "")
     })
