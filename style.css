@@ -9,11 +9,15 @@
     background-color: aliceblue;
 }
 
-.display {
+.equal-btn {
+    width: 200px;
+}
+
+#current-calculation {
     display: flex;
     align-items: flex-start;
     width: 516px;
-    height: 50px;
+    height: 100px;
     background-color: beige;
     padding: 5px;
     font-size: xx-large;
