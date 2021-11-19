@@ -84,20 +84,16 @@ function calculate(btnValue) {
             // if either the previous or current value are empty, another operand is required
             // else, a calculation can be performed with the two operands
             if (previousValue.length === 0 || currentValue.length === 0) {
-                operationToPerform = btnValue
                 previousValue = currentValue
                 currentValue = ""
+                operationToPerform = btnValue
             } else {
                 const result = OPERATIONS["arithmetic"]["="]()
-                currentValue = (btnValue === "=") ? result : ""
                 previousValue = (btnValue === "=") ? "" : result
+                currentValue = (btnValue === "=") ? result : ""
                 operationToPerform = btnValue
             }
-        } else {    // visual operation
-            OPERATIONS["visual"][btnValue]()
-        }
+        } else OPERATIONS["visual"][btnValue]()
     }
-    document.getElementById("previous-calculation").innerHTML = (btnValue !== "=") ? `${previousValue}` : `${previousValue} ${operationToPerform} ${currentValue}`
-    document.getElementById("current-operator").innerHTML = operationToPerform
-    document.getElementById("current-calculation").innerHTML = currentValue
+    document.getElementById("current-calculation").innerHTML = `${operationToPerform} ${currentValue}`
 }
