@@ -73,6 +73,7 @@ function calculator() {
 // 1. If a number button was clicked, add its value to the currentValue string
 // 2. Else, an operator button was clicked - perform either an arithmetic or visual operation
 function calculate(btnValue) {
+    let equation = ""
     if (!isNaN(parseFloat(btnValue))) {
         currentValue += btnValue
     } else {
@@ -81,23 +82,30 @@ function calculate(btnValue) {
             return alert("Invalid button - Button value provided does not match its expected value")
 
         if (Object.keys(OPERATIONS["arithmetic"]).includes(btnValue)) {
-            // if either the previous or current value are empty, another operand is required
-            // else, a calculation can be performed with the two operands
-            if (previousValue.length === 0 || currentValue.length === 0) {
-                operationToPerform = btnValue
+            // 1. If either the previous or current value are empty, another operand is required
+            // 2. else, a calculation can be performed with the two operands
+            if (previousValue.length === 0 || currentValue.length === 0 || operationToPerform === "=") {
                 previousValue = currentValue
                 currentValue = ""
+                operationToPerform = btnValue
             } else {
+                // evaluate the expression with previousValue and currentValue
                 const result = OPERATIONS["arithmetic"]["="]()
-                currentValue = (btnValue === "=") ? result : ""
-                previousValue = (btnValue === "=") ? "" : result
+
+                // 1. If "=" button is pressed, display the last step of the calculation
+                // 2. else, one of "x/+-" was pressed, continue the calculation
+                if (btnValue === "=") {
+                    equation = `${previousValue} ${operationToPerform} ${currentValue}`
+                    currentValue = result
+                } else {
+                    previousValue = result
+                    currentValue = ""
+                }
                 operationToPerform = btnValue
             }
-        } else {    // visual operation
-            OPERATIONS["visual"][btnValue]()
-        }
+        } else OPERATIONS["visual"][btnValue]()
     }
-    document.getElementById("previous-calculation").innerHTML = (btnValue !== "=") ? `${previousValue}` : `${previousValue} ${operationToPerform} ${currentValue}`
+    document.getElementById("previous-calculation").innerHTML = (btnValue === "=") ? equation : previousValue
     document.getElementById("current-operator").innerHTML = operationToPerform
     document.getElementById("current-calculation").innerHTML = currentValue
 }
