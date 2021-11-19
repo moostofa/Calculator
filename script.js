@@ -13,7 +13,7 @@ const OPERATIONS = {
         }, 
         "AC": () => previousValue = currentValue = operationToPerform = "",
         ".": () => currentValue += ".", 
-        "ANS": () => currentValue = previousValue, 
+        "ANS": () => currentValue = ANS, 
     },
     // combine arithmetic and visual operators and return a list of all operators
     "operators": () => {
@@ -27,6 +27,7 @@ const OPERATIONS = {
 let previousValue = "" 
 let currentValue = "" 
 let operationToPerform = ""
+let ANS = ""
 
 // display the calculator on the screen after DOM is loaded
 document.addEventListener("DOMContentLoaded", () => calculator())
@@ -42,7 +43,6 @@ function calculator() {
         {"numbers": [1, 2, 3], "operators": operators.slice(2, 4)},
         {"numbers": [0], "operators": operators.slice(7, operators.length).concat(operators[4])}
     ]
-
     // create number and operator buttons for each row
     calculatorBtns.forEach(btnRow => {
         const row = document.createElement("div")
@@ -73,7 +73,7 @@ function calculate(btnValue) {
     if (!isNaN(parseFloat(btnValue))) {
         currentValue += btnValue
     } else {
-        // error checking 
+        // error checking - incase button value was changed
         if (!OPERATIONS.operators().includes(btnValue))
             return alert("Invalid button - Button value provided does not match its expected value")
 
@@ -88,11 +88,11 @@ function calculate(btnValue) {
                 // evaluate the expression with previousValue and currentValue
                 const result = OPERATIONS["arithmetic"]["="]()
 
-                // 1. If "=" button is pressed, display the last step of the calculation
-                // 2. else, one of "x/+-" was pressed, continue the calculation
+                // 1. If "=" button is pressed, display result and the last step of the calculation
+                // 2. else, one of "x/+-" was pressed, continue the running calculation
                 if (btnValue === "=") {
                     equation = `${previousValue} ${operationToPerform} ${currentValue}`
-                    currentValue = result
+                    currentValue = ANS = result
                 } else {
                     previousValue = result
                     currentValue = ""
@@ -105,3 +105,7 @@ function calculate(btnValue) {
     document.getElementById("current-operator").innerHTML = operationToPerform
     document.getElementById("current-calculation").innerHTML = currentValue
 }
+
+// TODO: prevent user from spamming operator buttons and the "." (decimal) button
+// Solution 1: disable operator buttons after any operator button is clicked
+// Solution 2: Allow user to stack operator buttons but only perform calculation using the LAST operator
