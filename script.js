@@ -11,11 +11,7 @@ const OPERATIONS = {
             if (currentValue !== "") currentValue = currentValue.slice(0, -1) 
             else operationToPerform = ""
         }, 
-        "AC": () => {
-            if (currentValue !== "") currentValue = ""
-            else if (operationToPerform !== "") operationToPerform = ""
-            else previousValue = ""
-        },
+        "AC": () => previousValue = currentValue = operationToPerform = "",
         ".": () => currentValue += ".", 
         "ANS": () => currentValue = previousValue, 
     },

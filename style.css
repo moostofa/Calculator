@@ -13,11 +13,11 @@
     width: 200px;
 }
 
-#current-calculation {
+.display {
     display: flex;
     align-items: flex-start;
     width: 516px;
-    height: 100px;
+    height: 50px;
     background-color: beige;
     padding: 5px;
     font-size: xx-large;
