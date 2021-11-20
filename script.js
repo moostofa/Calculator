@@ -53,7 +53,33 @@ let ANS = ""
 let equation = ""
 
 // display the calculator on the screen after DOM is loaded
-document.addEventListener("DOMContentLoaded", () => calculator())
+document.addEventListener("DOMContentLoaded", () => {
+    // construct calculator
+    calculator()
+
+    // calculations can be performed using keyboard - listen for any key presses
+    document.addEventListener("keydown", (key) => {
+        const btnValue = key.key
+
+        // if any of these are true, the key pressed is valid
+        const conditons = [
+            (!isNaN(Number(btnValue))) && !document.querySelector("[name = '0']").disabled,
+            Object.keys(OPERATIONS["arithmetic"]).includes(btnValue) && !document.querySelector("[name = 'x']").disabled,
+            btnValue === "*",
+            btnValue === "Enter",
+            btnValue === ".",
+            btnValue === "Backspace"
+        ]
+
+        // call operate() using the appropriate operator
+        if (conditons.includes(true)) {
+            if (btnValue === "Backspace") operate("DEL")
+            else if (btnValue === "*") operate("x")
+            else if (btnValue === "Enter") operate("=")
+            else operate(btnValue)
+        }
+    })
+}) 
 
 // calculator constructor
 function calculator() {
@@ -101,7 +127,7 @@ function calculator() {
 // 1. If a number button was clicked, add its value to the currentValue string
 // 2. Else, an operator button was clicked - perform either an arithmetic or visual operation
 function operate(btnValue) {
-    if (!isNaN(parseFloat(btnValue))) {
+    if (!isNaN(Number(btnValue))) {
         currentValue += btnValue
         toggleOperatorBtns("ON")
     } else {
