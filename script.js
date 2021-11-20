@@ -10,8 +10,8 @@ const OPERATIONS = {
         } 
     },
     "visual": {
-        "DEL": () => {
-            if (operationToPerform !== "=") {   // prevent editing anything on results screen
+        "DEL": () => {    // "backspace" - delete latest character
+            if (operationToPerform !== "=") {    // prevent editing anything on results screen
                 if (currentValue !== "") {
                     currentValue = currentValue.slice(0, -1) 
                     if (currentValue === "") toggleOperatorBtns("OFF")
@@ -23,16 +23,16 @@ const OPERATIONS = {
                 } 
             }
         }, 
-        "AC": () => {
+        "AC": () => {   // clear everything
             previousValue = currentValue = operationToPerform = equation = ""
             toggleOperatorBtns("OFF")
             toggleNumberBtns("ON")
         },
-        ".": () => {
+        ".": () => {    // allow decimal calcualtions - maximum 1 decimal dot
             if (operationToPerform !== "=" && !currentValue.includes("."))
                 currentValue += "."
         }, 
-        "ANS": () => {
+        "ANS": () => {  // get previously calcualted value
             currentValue = ANS
             toggleOperatorBtns("ON")
         } 
