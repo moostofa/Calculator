@@ -74,6 +74,9 @@ function calculator() {
         // -- key -- will be "numbers" or "operators" and -- value -- is an array of values for the buttons
         Object.entries(btnRow).forEach(([key, value]) => {
             value.forEach(val => {
+                const col = document.createElement("div")
+                col.classList = "column"
+
                 const btn = document.createElement("button")
                 btn.name = btn.value = btn.innerHTML = val
 
@@ -84,7 +87,8 @@ function calculator() {
                 if (btn.value === "=") btn.classList += " equal-btn"  
 
                 btn.addEventListener("click", () => operate(btn.value))
-                row.appendChild(btn)
+                col.appendChild(btn)
+                row.appendChild(col)
             })
         })
         // add the row of buttons to the calculator
